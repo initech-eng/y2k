@@ -1,0 +1,36 @@
+# This is a basic workflow to help you get started with Actions
+
+name: create-pull-request
+
+on:
+  workflow_dispatch: 
+      
+jobs:
+  createPullRequest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make changes to pull request
+        run: date +%s > report.txt
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v4.2.3
+        with:
+          token: ${{ secrets.PAT }}
+          commit-message: Fix y2k
+          committer: Peter Gibbons <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          branch: fix
+          delete-branch: true
+          title: 'Fix y2k'
+          body: |
+            Fix y2k
+            - Updated with *today's* date
+          labels: |
+            bug
+          assignees: billlumbergh
+          reviewers: billlumbergh
+          draft: false
