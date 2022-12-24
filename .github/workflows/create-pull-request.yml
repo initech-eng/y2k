@@ -20,7 +20,7 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           commit-message: Fix y2k
-          committer: Peter Gibbons <noreply@github.com>
+          committer: brett-software <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
           branch: fix
@@ -31,6 +31,6 @@ jobs:
             - Updated with *today's* date
           labels: |
             bug
-          assignees: billlumbergh
-          reviewers: billlumbergh
+          assignees: brettmstevens7
+          reviewers: brettmstevens7
           draft: false
