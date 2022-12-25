@@ -21,7 +21,7 @@ jobs:
         id: jira-create
         uses: atlassian/gajira-create@v3
         with:
-          project: y2k
+          project: Y2K
           issuetype: Task
           summary: Fix y2k
           description: Created automatically via GitHub Actions
