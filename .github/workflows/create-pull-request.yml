@@ -34,6 +34,14 @@ jobs:
           assignees: billlumbergh-initech
           reviewers: billlumbergh-initech
           draft: false
+      
+      - name: Comment on pull request
+        id: compr
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          pr_number: ${{ steps.cpr.outputs.pull-request-number }}
+          message: |
+            Well... yeah.
           
       - name: Approve pull request
         id: apr
