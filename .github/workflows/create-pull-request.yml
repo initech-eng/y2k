@@ -39,6 +39,7 @@ jobs:
         id: compr
         uses: thollander/actions-comment-pull-request@v2
         with:
+          github-token: ${{ secrets.PAT2 }}
           pr_number: ${{ steps.cpr.outputs.pull-request-number }}
           message: |
             Well... yeah.
