@@ -10,21 +10,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Download pull request
-        uses: actions/download-artifact@v3
-        with:
-          name: pull-request
-
-      - shell: bash
-        id: retrieve-pull-request
-        run: |
-          value=`cat pull-request.txt`
-          echo "::set-output name=pull-request::$value"
+      - name: Find pull request
+        uses: jwalton/gh-find-current-pr@v1
+        id: find-pr
         
       - name: Merge pull request
         id: mpr
         uses: juliangruber/merge-pull-request-action@v1
         with:
           github-token: ${{ secrets.PAT }}
-          number: ${{ steps.retrieve-pull-request.outputs.pull-request }}
+          number: ${{ steps.find-pr.outputs.pr }}
           method: squash

@@ -35,12 +35,3 @@ jobs:
             bug
           reviewers: billlumbergh-initech
           draft: false
-
-      - name: Save pull request
-        run: echo "${{ steps.cpr.outputs.pull-request-number }}" > ./.github/dist/pull-request.txt
-
-      - name: Commit issue
-        uses: EndBug/add-and-commit@v9
-        with:
-          message: Update pull request
-  
