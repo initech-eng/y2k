@@ -9,43 +9,38 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      
-      - name: Get current date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-
-      - name: Make changes
-        run: date +%s > report.txt
 
       - shell: bash
         id: retrieve-issue
-        run: |
-          value=`cat issue.txt`
-          echo "::set-output name=issue::$value"
+        run: echo "ISSUE=$(cat issue.txt)" >> $GITHUB_ENV
+
+      - name: Make changes
+        run: date +%s > report.txt
 
       - name: Create pull request
         id: cpr
         uses: peter-evans/create-pull-request@v4.2.3
         with:
           token: ${{ secrets.PAT }}
-          commit-message: Fix y2k (${{ steps.retrieve-issue.outputs.issue }})
+          commit-message: Fix y2k (${{ env.ISSUE }})
           committer: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          branch: fix-${{ steps.retrieve-issue.outputs.issue }}
+          branch: fix-${{ env.ISSUE }}
           delete-branch: true
-          title: Fix y2k (${{ steps.retrieve-issue.outputs.issue }})
+          title: Fix y2k (${{ env.ISSUE }})
           body: |
             - Updated with *today's* date
           labels: |
             bug
           reviewers: billlumbergh-initech
           draft: false
-      
-      - shell: bash
+
+      - name: Save pull request
         run: echo "${{ steps.cpr.outputs.pull-request-number }}" > ./.github/dist/pull-request.txt
-      
-      - name: Upload pull request
-        uses: actions/upload-artifact@v3
+
+      - name: Commit issue
+        uses: EndBug/add-and-commit@v9
         with:
-          name: pull-request
-          path: ./.github/dist/pull-request.txt
+          message: Update pull request
+  
