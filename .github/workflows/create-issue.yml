@@ -1,0 +1,38 @@
+name: create-issue
+
+on:
+  workflow_dispatch: 
+      
+jobs:
+  createIssue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Log in to Jira
+        id: jira-login
+        uses: atlassian/gajira-login@v3
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          
+      - name: Create
+        id: jira-create
+        uses: atlassian/gajira-create@v3
+        with:
+          project: Y2K
+          issuetype: Task
+          summary: Fix y2
+          description: Created automatically via GitHub Actions
+
+      - shell: bash
+        run: echo "${{ steps.jira-create.outputs.issue }}" > ./.github/dist/issue.txt
+      
+      - name: Upload issue
+        uses: actions/upload-artifact@v3
+        with:
+          name: issue
+          path: ./.github/dist/issue.txt
+    

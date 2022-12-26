@@ -1,0 +1,38 @@
+name: manual-run
+
+on:
+  workflow_dispatch: 
+      
+jobs:
+  approvePullRequest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download pull request number
+        uses: actions/download-artifact@v3
+        with:
+          name: pull-request-number
+
+      - shell: bash
+        id: retrieve-pull-request-number
+        run: |
+          value=`cat pull-request-number.txt`
+          echo "::set-output name=pull-request-number::$value"
+      
+      - name: Comment on pull request
+        id: compr
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.PAT2 }}
+          pr_number: ${{ steps.retrieve-pull-request-number.outputs.pull-request-number }}
+          message: |
+            Well... yeah.
+          
+      - name: Approve pull request
+        id: apr
+        uses: juliangruber/approve-pull-request-action@v2.0.0
+        with:
+          github-token: ${{ secrets.PAT2 }}
+          number: ${{ steps.retrieve-pull-request-number.outputs.pull-request-number }}

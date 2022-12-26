@@ -7,44 +7,38 @@ jobs:
   createPullRequest:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Log in to Jira
-        id: jira-login
-        uses: atlassian/gajira-login@v3
-        env:
-          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-          
-      - name: Create
-        id: jira-create
-        uses: atlassian/gajira-create@v3
-        with:
-          project: Y2K
-          issuetype: Task
-          summary: Fix y2k
-          description: Created automatically via GitHub Actions
+      - name: Checkout repository
+        uses: actions/checkout@v3
       
       - name: Get current date
-        id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
       - name: Make changes
         run: date +%s > report.txt
+
+      - name: Download issue key
+        uses: actions/download-artifact@v3
+        with:
+          name: issue-key
+
+      - shell: bash
+        id: retrieve-issue
+        run: |
+          value=`cat issue.txt`
+          echo "::set-output name=issue::$value"
 
       - name: Create pull request
         id: cpr
         uses: peter-evans/create-pull-request@v4.2.3
         with:
           token: ${{ secrets.PAT }}
-          commit-message: Fix y2k (${{ steps.jira-create.outputs.issue }})
+          commit-message: Fix y2k (${{ steps.retrieve-issue.outputs.issue }})
           committer: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          branch: fix-${{ steps.jira-create.outputs.issue }}
+          branch: fix-${{ steps.retrieve-issue.outputs.issue }}
           delete-branch: true
-          title: Fix y2k (${{ steps.jira-create.outputs.issue }})
+          title: Fix y2k (${{ steps.retrieve-issue.outputs.issue }})
           body: |
             - Updated with *today's* date
           labels: |
@@ -52,26 +46,11 @@ jobs:
           reviewers: billlumbergh-initech
           draft: false
       
-      - name: Comment on pull request
-        id: compr
-        uses: thollander/actions-comment-pull-request@v2
+      - shell: bash
+        run: echo "${{ steps.cpr.outputs.pull-request-number }}" > ./.github/dist/pull-request-number.txt
+      
+      - name: Upload pull request number
+        uses: actions/upload-artifact@v3
         with:
-          GITHUB_TOKEN: ${{ secrets.PAT2 }}
-          pr_number: ${{ steps.cpr.outputs.pull-request-number }}
-          message: |
-            Well... yeah.
-          
-      - name: Approve pull request
-        id: apr
-        uses: juliangruber/approve-pull-request-action@v2.0.0
-        with:
-          github-token: ${{ secrets.PAT2 }}
-          number: ${{ steps.cpr.outputs.pull-request-number }}
-        
-      - name: Merge pull request
-        id: mpr
-        uses: juliangruber/merge-pull-request-action@v1
-        with:
-          github-token: ${{ secrets.PAT }}
-          number: ${{ steps.cpr.outputs.pull-request-number }}
-          method: squash
+          name: pull-request-number
+          path: ./.github/dist/pull-request-number.txt

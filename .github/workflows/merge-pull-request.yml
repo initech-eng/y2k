@@ -1,0 +1,30 @@
+name: manual-run
+
+on:
+  workflow_dispatch: 
+      
+jobs:
+  mergePullRequest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download pull request number
+        uses: actions/download-artifact@v3
+        with:
+          name: pull-request-number
+
+      - shell: bash
+        id: retrieve-pull-request-number
+        run: |
+          value=`cat pull-request-number.txt`
+          echo "::set-output name=pull-request-number::$value"
+        
+      - name: Merge pull request
+        id: mpr
+        uses: juliangruber/merge-pull-request-action@v1
+        with:
+          github-token: ${{ secrets.PAT }}
+          number: ${{ steps.retrieve-pull-request-number.outputs.pull-request-number }}
+          method: squash
