@@ -30,3 +30,8 @@ jobs:
 
       - name: Save issue
         run: echo "${{ steps.jira-create.outputs.issue }}" > ./.github/dist/issue.txt
+
+      - name: Commit issue
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: Update issue
