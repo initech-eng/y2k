@@ -10,23 +10,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Download pull request number
+      - name: Download pull request
         uses: actions/download-artifact@v3
         with:
-          name: pull-request-number
+          name: pull-request
 
       - shell: bash
-        id: retrieve-pull-request-number
+        id: retrieve-pull-request
         run: |
-          value=`cat pull-request-number.txt`
-          echo "::set-output name=pull-request-number::$value"
+          value=`cat pull-request.txt`
+          echo "::set-output name=pull-request::$value"
       
       - name: Comment on pull request
         id: compr
         uses: thollander/actions-comment-pull-request@v2
         with:
           GITHUB_TOKEN: ${{ secrets.PAT2 }}
-          pr_number: ${{ steps.retrieve-pull-request-number.outputs.pull-request-number }}
+          pr_number: ${{ steps.retrieve-pull-request.outputs.pull-request }}
           message: |
             Well... yeah.
           
@@ -35,4 +35,4 @@ jobs:
         uses: juliangruber/approve-pull-request-action@v2.0.0
         with:
           github-token: ${{ secrets.PAT2 }}
-          number: ${{ steps.retrieve-pull-request-number.outputs.pull-request-number }}
+          number: ${{ steps.retrieve-pull-request.outputs.pull-request }}

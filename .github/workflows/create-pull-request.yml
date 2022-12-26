@@ -47,10 +47,10 @@ jobs:
           draft: false
       
       - shell: bash
-        run: echo "${{ steps.cpr.outputs.pull-request-number }}" > ./.github/dist/pull-request-number.txt
+        run: echo "${{ steps.cpr.outputs.pull-request-number }}" > ./.github/dist/pull-request.txt
       
-      - name: Upload pull request number
+      - name: Upload pull request
         uses: actions/upload-artifact@v3
         with:
-          name: pull-request-number
-          path: ./.github/dist/pull-request-number.txt
+          name: pull-request
+          path: ./.github/dist/pull-request.txt
