@@ -24,15 +24,11 @@ jobs:
         with:
           project: Y2K
           issuetype: Task
-          summary: Fix y2
+          summary: Fix y2k
           description: Created automatically via GitHub Actions
 
-      - shell: bash
-        run: echo "${{ steps.jira-create.outputs.issue }}" > ./.github/dist/issue.txt
-      
-      - name: Upload issue
-        uses: actions/upload-artifact@v3
-        with:
-          name: issue
-          path: ./.github/dist/issue.txt
-    
+      - name: Get issue
+        run: echo "::set-output name=issue::${{ steps.jira-create.outputs.issue }}"
+
+      - name: Save issue
+        run: issue > ./.github/dist/issue.txt

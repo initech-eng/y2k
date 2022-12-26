@@ -16,11 +16,6 @@ jobs:
       - name: Make changes
         run: date +%s > report.txt
 
-      - name: Download issue
-        uses: actions/download-artifact@v3
-        with:
-          name: issue
-
       - shell: bash
         id: retrieve-issue
         run: |
