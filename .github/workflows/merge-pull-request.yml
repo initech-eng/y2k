@@ -10,14 +10,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Find issue
+        id: find-issue
+        run: echo "ISSUE=$(cat ./.github/dist/issue.txt)" >> $GITHUB_ENV
+
       - name: Find pull request
-        uses: jwalton/gh-find-current-pr@v1
-        id: find-pr
+        uses: juliangruber/find-pull-request-action@v1
+        id: find-pull-request
+        with:
+          branch: fix-${{ env.ISSUE }}
         
       - name: Merge pull request
         id: mpr
         uses: juliangruber/merge-pull-request-action@v1
         with:
           github-token: ${{ secrets.PAT }}
-          number: ${{ steps.find-pr.outputs.pr }}
+          number: ${{ steps.find-pull-request.outputs.number }}
           method: squash

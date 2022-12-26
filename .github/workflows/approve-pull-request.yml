@@ -10,16 +10,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Find issue
+        id: find-issue
+        run: echo "ISSUE=$(cat ./.github/dist/issue.txt)" >> $GITHUB_ENV
+
       - name: Find pull request
-        uses: jwalton/gh-find-current-pr@v1
-        id: find-pr
+        uses: juliangruber/find-pull-request-action@v1
+        id: find-pull-request
+        with:
+          branch: fix-${{ env.ISSUE }}
       
       - name: Comment on pull request
         id: compr
         uses: thollander/actions-comment-pull-request@v2
         with:
           GITHUB_TOKEN: ${{ secrets.PAT2 }}
-          pr_number: ${{ steps.find-pr.outputs.pr }}
+          pr_number: ${{ steps.find-pull-request.outputs.number }}
           message: |
             Well... yeah.
           
@@ -28,4 +34,4 @@ jobs:
         uses: juliangruber/approve-pull-request-action@v2.0.0
         with:
           github-token: ${{ secrets.PAT2 }}
-          number: ${{ steps.find-pr.outputs.pr }}
+          number: ${{ steps.find-pull-request.outputs.number }}

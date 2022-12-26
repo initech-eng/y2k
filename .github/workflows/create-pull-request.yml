@@ -10,8 +10,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - shell: bash
-        id: retrieve-issue
+      - name: Find issue
+        id: find-issue
         run: echo "ISSUE=$(cat ./.github/dist/issue.txt)" >> $GITHUB_ENV
 
       - name: Make changes
