@@ -12,7 +12,7 @@ jobs:
 
       - shell: bash
         id: retrieve-issue
-        run: echo "ISSUE=$(cat issue.txt)" >> $GITHUB_ENV
+        run: echo "ISSUE=$(cat ./.github/dist/issue.txt)" >> $GITHUB_ENV
 
       - name: Make changes
         run: date +%s > report.txt
