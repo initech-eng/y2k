@@ -26,7 +26,7 @@ jobs:
           committer: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          branch: fix-${{ env.ISSUE }}
+          branch: ${{ env.ISSUE }}
           delete-branch: true
           title: Fix y2k (${{ env.ISSUE }})
           body: |

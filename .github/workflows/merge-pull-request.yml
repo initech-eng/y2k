@@ -18,7 +18,7 @@ jobs:
         uses: juliangruber/find-pull-request-action@v1
         id: find-pull-request
         with:
-          branch: fix-${{ env.ISSUE }}
+          branch: ${{ env.ISSUE }}
         
       - name: Merge pull request
         id: mpr
