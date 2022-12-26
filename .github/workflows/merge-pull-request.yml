@@ -1,4 +1,4 @@
-name: manual-run
+name: merge-pull-request
 
 on:
   workflow_dispatch: 

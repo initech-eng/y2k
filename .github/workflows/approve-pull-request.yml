@@ -1,4 +1,4 @@
-name: manual-run
+name: approve-pull-request
 
 on:
   workflow_dispatch: 
