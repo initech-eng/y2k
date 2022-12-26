@@ -14,6 +14,10 @@ jobs:
       - name: Get branch
         run: echo "BRANCH=$(git for-each-ref --count=2 --sort=-committerdate refs/heads/ --format='%(refname:short)' | grep -v "main")" >> $GITHUB_ENV
 
+      - name: Checkout branch
+        uses: actions/checkout@v3
+        ref: ${{ env.BRANCH }}
+
       - name: Make changes
         run: date +%s > report.txt
 
