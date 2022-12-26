@@ -14,14 +14,12 @@ jobs:
       - name: Get branch
         run: echo "BRANCH=$(git for-each-ref --count=2 --sort=-committerdate refs/heads/ --format='%(refname:short)' | grep -v "main")" >> $GITHUB_ENV
 
-      - name: Checkout branch
-        uses: actions/checkout@v3
-        ref: ${{ env.BRANCH }}
-
       - name: Make changes
         run: date +%s > report.txt
 
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v9
+      - name: Commit and push changes
+        uses: actions-js/push@master
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ env.BRANCH }}
           message: Update date
