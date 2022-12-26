@@ -34,14 +34,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           branch: ${{ steps.jira-create.outputs.issue }}
-      
-      - name: Get branch
-        run: echo "BRANCH=$(git for-each-ref --count=2 --sort=-committerdate refs/heads/ --format='%(refname:short)' | grep -v "main")" >> $GITHUB_ENV
-
-      # - name: Save issue
-      #   run: echo "${{ steps.jira-create.outputs.issue }}" > ./.github/dist/issue.txt
-
-      # - name: Commit issue
-      #   uses: EndBug/add-and-commit@v9
-      #   with:
-      #     message: Update issue

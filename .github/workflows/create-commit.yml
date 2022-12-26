@@ -1,0 +1,23 @@
+name: create-commit
+
+on:
+  workflow_dispatch: 
+      
+jobs:
+  createCommit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Get branch
+        run: echo "BRANCH=$(git for-each-ref --count=2 --sort=-committerdate refs/heads/ --format='%(refname:short)' | grep -v "main")" >> $GITHUB_ENV
+
+      - name: Make changes
+        run: date +%s > report.txt
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: Update date
