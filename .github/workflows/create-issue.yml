@@ -6,6 +6,7 @@ on:
 jobs:
   createIssue:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -27,8 +28,5 @@ jobs:
           summary: Fix y2k
           description: Created automatically via GitHub Actions
 
-      - name: Get issue
-        run: echo "::set-output name=issue::${{ steps.jira-create.outputs.issue }}"
-
       - name: Save issue
-        run: issue > ./.github/dist/issue.txt
+        run: echo "${{ steps.jira-create.outputs.issue }}" > ./.github/dist/issue.txt
