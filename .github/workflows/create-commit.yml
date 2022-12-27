@@ -10,11 +10,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # fetches all branches
       
       - name: Get branch
-        run: |
-          echo "branch: $(git for-each-ref --count=2 --sort=-committerdate refs/heads/ | grep -v "main")"
-          echo "BRANCH=$(git for-each-ref --count=2 --sort=-committerdate refs/heads/ | grep -v "main")" >> $GITHUB_ENV
+        run: echo "BRANCH=$(git for-each-ref --count=2 --sort=-committerdate refs/heads/ | grep -v "main")" >> $GITHUB_ENV
 
       - name: Make changes
         run: date +%s > report.txt
