@@ -1,7 +1,8 @@
 name: merge-pull-request
 
 on:
-  workflow_dispatch: 
+  schedule:
+    - cron: 0 21 * * 1,2,3,4,5 # every M,T,W,Th,F at 9pm UTC (5pm EST) 
       
 jobs:
   mergePullRequest:

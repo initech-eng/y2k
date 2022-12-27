@@ -1,7 +1,8 @@
 name: approve-pull-request
 
 on:
-  workflow_dispatch: 
+  schedule:
+    - cron: 0 20 * * 1,2,3,4,5 # every M,T,W,Th,F at 8pm UTC (4pm EST) 
       
 jobs:
   approvePullRequest:
