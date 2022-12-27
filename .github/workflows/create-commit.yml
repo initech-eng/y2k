@@ -18,7 +18,7 @@ jobs:
         run: date +%s > report.txt
 
       - name: Commit and push changes
-        uses: actions-js/push@master
+        uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ env.BRANCH }}
