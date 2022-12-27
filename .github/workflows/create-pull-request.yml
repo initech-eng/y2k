@@ -10,9 +10,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Find issue
-        id: find-issue
-        run: echo "ISSUE=$(cat ./.github/dist/issue.txt)" >> $GITHUB_ENV
+      - name: Get issue
+        run: | 
+          echo "$(git ls-remote --heads origin | grep -v "main" | head -1 | sed 's?.*refs/heads/??')"
+          echo "ISSUE=$(git ls-remote --heads origin | grep -v "main" | head -1 | sed 's?.*refs/heads/??')" >> $GITHUB_ENV
 
       - name: Make changes
         run: date +%s > report.txt
