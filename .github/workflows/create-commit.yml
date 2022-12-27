@@ -21,15 +21,15 @@ jobs:
       - name: Make changes
         run: date +%s > report.txt
 
-      # - name: Commit and push changes
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: ${{ env.BRANCH }}
-
-      - run: |
+      - name: Commit changes
+        run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
           git commit -m "update date"
-          git push origin ${{ env.BRANCH }}
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ env.BRANCH }}
