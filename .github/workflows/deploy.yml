@@ -1,0 +1,31 @@
+name: deploy
+
+on:
+  schedule:
+    - cron: 0 22 * * 1,2,3,4,5 # every M,T,W,Th,F at 10pm UTC (6pm EST) 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create GitHub deployment
+        uses: chrnorm/deployment-action@v2
+        id: deployment
+        with:
+          token: '${{ secrets.PAT }}'
+          environment-url: https://app.initech.com
+          environment: production
+
+      - name: Deploy my app
+        run: |
+          # deployment code would go here
+
+      - name: Update deployment status (success)
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ secrets.PAT }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'success'
