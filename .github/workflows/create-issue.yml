@@ -2,7 +2,7 @@ name: create-issue
 
 on:
   schedule: 
-    - cron: 0 13 * * 1,2,3,4,5 # every M,T,W,Th,F at 1pm UTC (9am EST)
+    - cron: 0 9 * * 1,2,3,4,5 # every M,T,W,Th,F at 9am UTC (5am EST)
       
 jobs:
   createIssue:

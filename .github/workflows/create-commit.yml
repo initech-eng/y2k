@@ -2,7 +2,7 @@ name: create-commit
 
 on:
   schedule: 
-    - cron: 0 14 * * 1,2,3,4,5 # every M,T,W,Th,F at 2pm UTC (10am EST)
+    - cron: 0 10 * * 1,2,3,4,5 # every M,T,W,Th,F at 10am UTC (6am EST)
       
 jobs:
   createCommit:
