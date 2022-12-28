@@ -1,7 +1,7 @@
 name: deploy
 
 on:
-  workflow-dispatch:
+  workflow_dispatch:
   # schedule:
   #   - cron: 0 22 * * 1,2,3,4,5 # every M,T,W,Th,F at 10pm UTC (6pm EST) 
 
