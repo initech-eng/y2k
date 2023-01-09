@@ -33,7 +33,7 @@ jobs:
       - name: Create branch
         uses: peterjgrainger/action-create-branch@v2.2.0
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT3 }} # petergibbons22
+          GITHUB_TOKEN: ${{ secrets.PAT3 }} # petergibbons2
         with:
           branch: ${{ steps.jira-create.outputs.issue }}
 
@@ -50,7 +50,7 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.PAT3 }} # petergibbons22
+          github_token: ${{ secrets.PAT3 }} # petergibbons2
           branch: ${{ steps.jira-create.outputs.issue }}
           force: true
   
@@ -58,7 +58,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v4.2.3
         with:
-          token: ${{ secrets.PAT3 }} # petergibbons22
+          token: ${{ secrets.PAT3 }} # petergibbons2
           commit-message: Bug fix (${{ steps.jira-create.outputs.issue }})
           committer: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
@@ -84,6 +84,6 @@ jobs:
         id: mpr
         uses: juliangruber/merge-pull-request-action@v1
         with:
-          github-token: ${{ secrets.PAT3 }}  # petergibbons22
+          github-token: ${{ secrets.PAT3 }}  # petergibbons2
           number: ${{ steps.cpr.outputs.pull-request-number }}
           method: squash

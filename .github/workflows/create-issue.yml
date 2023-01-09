@@ -1,6 +1,7 @@
 name: create-issue
 
 on:
+  workflow_dispatch:
   schedule: 
     - cron: 0 9 * * 1,2,3,4,5 # every M,T,W,Th,F at 9am UTC (5am EST)
       
@@ -32,6 +33,6 @@ jobs:
       - name: Create a branch
         uses: peterjgrainger/action-create-branch@v2.2.0
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT3 }} # petergibbons22
+          GITHUB_TOKEN: ${{ secrets.PAT3 }} # petergibbons2
         with:
           branch: ${{ steps.jira-create.outputs.issue }}

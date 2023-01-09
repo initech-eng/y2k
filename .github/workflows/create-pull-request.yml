@@ -1,6 +1,7 @@
 name: create-pull-request
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: 30 10 * * 1,2,3,4,5 # every M,T,W,Th,F at 10:30am UTC (6:30am EST) 
       
@@ -20,7 +21,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v4.2.3
         with:
-          token: ${{ secrets.PAT3 }} # petergibbons22
+          token: ${{ secrets.PAT3 }} # petergibbons2
           commit-message: Fix y2k (${{ env.ISSUE }})
           committer: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
