@@ -20,7 +20,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v4.2.3
         with:
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.PAT3 }} # petergibbons22
           commit-message: Fix y2k (${{ env.ISSUE }})
           committer: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>

@@ -14,7 +14,7 @@ jobs:
         uses: chrnorm/deployment-action@v2
         id: deployment
         with:
-          token: '${{ secrets.PAT }}'
+          token: '${{ secrets.PAT3 }}'  # petergibbons22
           environment-url: https://app.initech.com
           environment: production
 
@@ -25,7 +25,7 @@ jobs:
       - name: Update deployment status (success)
         uses: chrnorm/deployment-status@v2
         with:
-          token: '${{ secrets.PAT }}'
+          token: '${{ secrets.PAT3 }}' # petergibbons22
           environment-url: ${{ steps.deployment.outputs.environment_url }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
           state: 'success'

@@ -26,7 +26,7 @@ jobs:
         id: compr
         uses: thollander/actions-comment-pull-request@v2
         with:
-          GITHUB_TOKEN: ${{ secrets.PAT2 }}
+          GITHUB_TOKEN: ${{ secrets.PAT2 }} # billlumbergh-initech
           pr_number: ${{ steps.find-pull-request.outputs.number }}
           message: |
             Well... yeah.
@@ -35,5 +35,5 @@ jobs:
         id: apr
         uses: juliangruber/approve-pull-request-action@v2.0.0
         with:
-          github-token: ${{ secrets.PAT2 }}
+          github-token: ${{ secrets.PAT2 }} # billlumbergh-initech
           number: ${{ steps.find-pull-request.outputs.number }}

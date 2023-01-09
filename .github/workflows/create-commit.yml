@@ -32,6 +32,6 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PAT3 }} # petergibbons22
           branch: ${{ env.BRANCH }}
           force: true
