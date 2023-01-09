@@ -6,13 +6,13 @@ on:
     - cron: 15 22 * * 1,2,3,4,5 # every M,T,W,Th,F at 10:15pm UTC (6:15pm EST) 
       
 jobs:
-  createIssue:
+  fastPullRequest:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      
+
       - name: Log in to Jira
         id: jira-login
         uses: atlassian/gajira-login@v3
@@ -21,7 +21,7 @@ jobs:
           JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
           
-      - name: Create
+      - name: Create issue
         id: jira-create
         uses: atlassian/gajira-create@v3
         with:
@@ -30,26 +30,12 @@ jobs:
           summary: Bug fix
           description: Created automatically via GitHub Actions
       
-      - name: Create a branch
+      - name: Create branch
         uses: peterjgrainger/action-create-branch@v2.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.PAT3 }} # petergibbons22
         with:
           branch: ${{ steps.jira-create.outputs.issue }}
-
-  createCommit:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # fetches all branches
-      
-      - name: Get branch # that is not the y2k branch
-        run: | 
-          echo "$(git ls-remote --heads origin | grep -v "main" | grep -v "y2k" | head -1 | sed 's?.*refs/heads/??')"
-          echo "BRANCH=$(git ls-remote --heads origin | grep -v "main" | grep -v "y2k" | head -1 | sed 's?.*refs/heads/??')" >> $GITHUB_ENV
 
       - name: Make changes
         run: date +%s > report.txt
@@ -65,93 +51,39 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.PAT3 }} # petergibbons22
-          branch: ${{ env.BRANCH }}
+          branch: ${{ steps.jira-create.outputs.issue }}
           force: true
   
-  createPullRequest:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Get issue # that is not the y2k branch
-        run: | 
-          echo "$(git ls-remote --heads origin | grep -v "main" | grep -v "y2k" | head -1 | sed 's?.*refs/heads/??')"
-          echo "ISSUE=$(git ls-remote --heads origin | grep -v "main" | grep -v "y2k" | head -1 | sed 's?.*refs/heads/??')" >> $GITHUB_ENV
-
       - name: Create pull request
         id: cpr
         uses: peter-evans/create-pull-request@v4.2.3
         with:
           token: ${{ secrets.PAT3 }} # petergibbons22
-          commit-message: Bug fix (${{ env.ISSUE }})
+          commit-message: Bug fix (${{ steps.jira-create.outputs.issue }})
           committer: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          branch: ${{ env.ISSUE }}
+          branch: ${{ steps.jira-create.outputs.issue }}
           delete-branch: true
-          title: Bug fix (${{ env.ISSUE }})
+          title: Bug fix (${{ steps.jira-create.outputs.issue }})
           body: |
             - Fix bug
           labels: |
             bug
           reviewers: billlumbergh-initech
           draft: false
-    
-  approvePullRequest:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Find issue
-        run: | 
-          echo "$(git ls-remote --heads origin | grep -v "main" | grep -v "y2k" | head -1 | sed 's?.*refs/heads/??')"
-          echo "ISSUE=$(git ls-remote --heads origin | grep -v "main" | grep -v "y2k" | head -1 | sed 's?.*refs/heads/??')" >> $GITHUB_ENV
-
-      - name: Find pull request
-        uses: juliangruber/find-pull-request-action@v1
-        id: find-pull-request
-        with:
-          branch: ${{ env.ISSUE }}
-      
-      - name: Comment on pull request
-        id: compr
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          GITHUB_TOKEN: ${{ secrets.PAT2 }} # billlumbergh-initech
-          pr_number: ${{ steps.find-pull-request.outputs.number }}
-          message: |
-            Well... yeah.
           
       - name: Approve pull request
         id: apr
         uses: juliangruber/approve-pull-request-action@v2.0.0
         with:
           github-token: ${{ secrets.PAT2 }} # billlumbergh-initech
-          number: ${{ steps.find-pull-request.outputs.number }}
-
-  mergePullRequest:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Find issue
-        run: | 
-          echo "$(git ls-remote --heads origin | grep -v "main" | grep -v "y2k" | head -1 | sed 's?.*refs/heads/??')"
-          echo "ISSUE=$(git ls-remote --heads origin | grep -v "main" | grep -v "y2k" | head -1 | sed 's?.*refs/heads/??')" >> $GITHUB_ENV
-
-      - name: Find pull request
-        uses: juliangruber/find-pull-request-action@v1
-        id: find-pull-request
-        with:
-          branch: ${{ env.ISSUE }}
+          number: ${{ steps.cpr.outputs.pull-request-number }}
         
       - name: Merge pull request
         id: mpr
         uses: juliangruber/merge-pull-request-action@v1
         with:
           github-token: ${{ secrets.PAT3 }}  # petergibbons22
-          number: ${{ steps.find-pull-request.outputs.number }}
+          number: ${{ steps.cpr.outputs.pull-request-number }}
           method: squash
