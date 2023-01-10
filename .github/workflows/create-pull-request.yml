@@ -17,6 +17,9 @@ jobs:
           echo "$(git ls-remote --heads origin | grep -v "main" | head -1 | sed 's?.*refs/heads/??')"
           echo "ISSUE=$(git ls-remote --heads origin | grep -v "main" | head -1 | sed 's?.*refs/heads/??')" >> $GITHUB_ENV
 
+      - name: Make changes
+        run: date +%s > report.txt
+
       - name: Create pull request
         id: cpr
         uses: peter-evans/create-pull-request@v4.2.3
