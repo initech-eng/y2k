@@ -3,7 +3,7 @@ name: create-issue
 on:
   workflow_dispatch:
   schedule: 
-    - cron: 0 9 * * 1,2,3,4,5 # every M,T,W,Th,F at 9am UTC (5am EST)
+    - cron: 15 22 * * * # every day at 10:15pm UTC (6:15pm EST)
       
 jobs:
   createIssue:

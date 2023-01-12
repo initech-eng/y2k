@@ -3,7 +3,7 @@ name: create-commit
 on:
   workflow_dispatch:
   schedule: 
-    - cron: 0 10 * * 1,2,3,4,5 # every M,T,W,Th,F at 10am UTC (6am EST)
+    - cron: 30 22 * * * # every day at 10:30pm UTC (6:30pm EST)
       
 jobs:
   createCommit:
