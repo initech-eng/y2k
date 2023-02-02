@@ -14,8 +14,8 @@ jobs:
 
       - name: Find issue
         run: | 
-          echo "$(git ls-remote --heads origin | grep -v "main" | head -1 | sed 's?.*refs/heads/??')"
-          echo "ISSUE=$(git ls-remote --heads origin | grep -v "main" | head -1 | sed 's?.*refs/heads/??')" >> $GITHUB_ENV
+          echo "$(git ls-remote --heads origin | grep "Y2K" | head -1 | sed 's?.*refs/heads/??')"
+          echo "ISSUE=$(git ls-remote --heads origin | grep "Y2K" | head -1 | sed 's?.*refs/heads/??')" >> $GITHUB_ENV
 
       - name: Find pull request
         uses: juliangruber/find-pull-request-action@v1

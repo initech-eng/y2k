@@ -17,8 +17,8 @@ jobs:
       
       - name: Get branch
         run: | 
-          echo "$(git ls-remote --heads origin | grep -v "main" | head -1 | sed 's?.*refs/heads/??')"
-          echo "BRANCH=$(git ls-remote --heads origin | grep -v "main" | head -1 | sed 's?.*refs/heads/??')" >> $GITHUB_ENV
+          echo "$(git ls-remote --heads origin | grep "Y2K" | head -1 | sed 's?.*refs/heads/??')"
+          echo "BRANCH=$(git ls-remote --heads origin | grep "Y2K" | head -1 | sed 's?.*refs/heads/??')" >> $GITHUB_ENV
 
       - name: Make changes
         run: date +%s > report.txt
